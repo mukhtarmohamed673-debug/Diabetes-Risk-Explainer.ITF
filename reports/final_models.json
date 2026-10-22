@@ -1,0 +1,70 @@
+{
+  "d19": {
+    "model": "Extra Trees",
+    "imbalance": "none",
+    "params": {
+      "model__n_estimators": 400,
+      "model__min_samples_leaf": 5,
+      "model__max_features": "sqrt",
+      "model__max_depth": 16
+    },
+    "test": {
+      "macro_f1": 0.803,
+      "balanced_accuracy": 0.803,
+      "accuracy": 0.8361,
+      "roc_auc": 0.8992
+    },
+    "size_mb": 0.3
+  },
+  "d19_nomed": {
+    "model": "Extra Trees",
+    "imbalance": "SMOTE",
+    "params": {
+      "model__n_estimators": 400,
+      "model__min_samples_leaf": 10,
+      "model__max_features": "sqrt",
+      "model__max_depth": 24
+    },
+    "test": {
+      "macro_f1": 0.8254,
+      "balanced_accuracy": 0.8307,
+      "accuracy": 0.8525,
+      "roc_auc": 0.8682
+    },
+    "size_mb": 0.3
+  },
+  "brfss3": {
+    "model": "Random Forest",
+    "imbalance": "random oversampling",
+    "params": {
+      "model__n_estimators": 200,
+      "model__min_samples_leaf": 5,
+      "model__max_features": "sqrt",
+      "model__max_depth": null
+    },
+    "test": {
+      "macro_f1": 0.4395,
+      "balanced_accuracy": 0.4896,
+      "accuracy": 0.7604,
+      "roc_auc": 0.7481
+    },
+    "size_mb": 172.6
+  },
+  "brfss_bin": {
+    "model": "Random Forest",
+    "imbalance": "random oversampling",
+    "params": {
+      "model__n_estimators": 200,
+      "model__min_samples_leaf": 5,
+      "model__max_features": "sqrt",
+      "model__max_depth": null
+    },
+    "test": {
+      "macro_f1": 0.6617,
+      "balanced_accuracy": 0.7243,
+      "accuracy": 0.7878,
+      "roc_auc": 0.8182
+    },
+    "size_mb": 128.7
+  }
+}

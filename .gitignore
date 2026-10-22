@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+data/raw/*
+data/processed/*
+models/*
+!**/.gitkeep
+~$*
+.pytest_cache/
+study/responses.csv
+
+# Kept off the public repository
+Project E:T/
+references/
+study/Researcher Answer Key*
+docs/*.docx

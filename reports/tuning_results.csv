@@ -1,0 +1,7 @@
+split,model,imbalance,default_cv_f1,tuned_cv_f1,params
+d19,Extra Trees,none,0.7633743580108225,0.7692770687143412,"{""model__n_estimators"": 400, ""model__min_samples_leaf"": 5, ""model__max_features"": ""sqrt"", ""model__max_depth"": 16}"
+d19,Logistic Regression,class weights,0.7588287556381396,0.7690040332704173,"{""model__C"": 0.001}"
+d19_nomed,Extra Trees,SMOTE,0.7432116594129298,0.7533047401263576,"{""model__n_estimators"": 400, ""model__min_samples_leaf"": 10, ""model__max_features"": ""sqrt"", ""model__max_depth"": 24}"
+d19_nomed,Logistic Regression,random oversampling,0.7408041442502171,0.7524540268012748,"{""model__C"": 0.01}"
+brfss3,Gradient Boosting,random oversampling,0.4300447746941313,0.43534047173394,"{""model__min_samples_leaf"": 100, ""model__max_leaf_nodes"": 63, ""model__max_iter"": 200, ""model__learning_rate"": 0.1, ""model__l2_regularization"": 1.0}"
+brfss3,Random Forest,random oversampling,0.425207337539217,0.4431238507461334,"{""model__n_estimators"": 200, ""model__min_samples_leaf"": 5, ""model__max_features"": ""sqrt"", ""model__max_depth"": null}"

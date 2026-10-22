@@ -1,0 +1,5 @@
+Dataset,Protocol,Accuracy,Macro-F1
+Diabetes 2019,"Leaky (oversample, then split)",0.9525547445255474,0.9525035002333488
+Diabetes 2019,Leakage-free (this project),0.819672131147541,0.7796387520525452
+BRFSS 2015 (3-class),"Leaky (oversample, then split)",0.9734834895727722,0.9733962713247543
+BRFSS 2015 (3-class),Leakage-free (this project),0.8295293282876064,0.389171062380769
