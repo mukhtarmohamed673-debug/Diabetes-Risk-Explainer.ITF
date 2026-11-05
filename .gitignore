@@ -6,6 +6,9 @@ data/raw/*
 data/processed/*
 models/*
 !**/.gitkeep
+# The small interface model ships with the app
+!models/interface_brfss_bin_gb.joblib
+!models/interface_brfss_bin_gb.json
 ~$*
 .pytest_cache/
 study/responses.csv

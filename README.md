@@ -61,6 +61,16 @@ diabetes merged) and an extra `ID` column. It's not used by default.
 - `responses_template.csv`: copy to `responses.csv` (git-ignored) and enter each participant's results
 - `score_study.py`: comprehension, SUS and trust summaries (`.venv/bin/python study/score_study.py`)
 
+## Setup
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt
+```
+
+`requirements.txt` has only what the app needs; `requirements-dev.txt` adds the notebook
+and test packages.
+
 ## Run the interface
 
 ```bash

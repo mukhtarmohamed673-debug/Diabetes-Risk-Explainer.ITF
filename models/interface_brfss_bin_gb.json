@@ -1,0 +1,45 @@
+{
+  "dataset": "BRFSS 2015, binary (diabetes vs not; prediabetes counted as not)",
+  "model": "Gradient Boosting (HistGradientBoostingClassifier)",
+  "imbalance": "none",
+  "params": {
+    "model__min_samples_leaf": 20,
+    "model__max_leaf_nodes": 15,
+    "model__max_iter": 400,
+    "model__learning_rate": 0.03,
+    "model__l2_regularization": 1.0
+  },
+  "threshold": 0.28,
+  "features": [
+    "HighBP",
+    "HighChol",
+    "CholCheck",
+    "BMI",
+    "Smoker",
+    "Stroke",
+    "HeartDiseaseorAttack",
+    "PhysActivity",
+    "Fruits",
+    "Veggies",
+    "HvyAlcoholConsump",
+    "AnyHealthcare",
+    "NoDocbcCost",
+    "GenHlth",
+    "MentHlth",
+    "PhysHlth",
+    "DiffWalk",
+    "Sex",
+    "Age",
+    "Education",
+    "Income"
+  ],
+  "base_rate": 0.13933400346893723,
+  "test": {
+    "macro_f1": 0.6799,
+    "balanced_accuracy": 0.6994,
+    "accuracy": 0.831,
+    "roc_auc": 0.8271,
+    "brier": 0.0974
+  },
+  "size_mb": 0.22
+}

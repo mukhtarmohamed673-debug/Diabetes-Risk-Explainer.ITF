@@ -47,6 +47,7 @@ BRFSS_FEATURES = {
     "Education": ("Education", "Highest level of education", EDUCATION),
     "Income": ("Household income", "Annual household income", INCOME),
 }
+YES_NO_FEATURES = [c for c, (_, _, values) in BRFSS_FEATURES.items() if values is YES_NO]
 
 
 def label(column: str) -> str:
@@ -91,7 +92,7 @@ def shap_values(pipe, X: pd.DataFrame, explainer=None) -> shap.Explanation:
 
 def lime_explainer(pipe, X_background: pd.DataFrame) -> LimeTabularExplainer:
     Xt = preprocess(pipe, X_background)
-    categorical = [i for i, c in enumerate(Xt.columns) if BRFSS_FEATURES.get(c, (0, 0, None))[2] is YES_NO]
+    categorical = [i for i, c in enumerate(Xt.columns) if c in YES_NO_FEATURES]
     return LimeTabularExplainer(
         Xt.to_numpy(), feature_names=list(Xt.columns), class_names=["No diabetes", "Diabetes"],
         categorical_features=categorical, mode="classification", discretize_continuous=True,
@@ -99,12 +100,11 @@ def lime_explainer(pipe, X_background: pd.DataFrame) -> LimeTabularExplainer:
     )
 
 
-def lime_weights(pipe, explainer: LimeTabularExplainer, row: pd.DataFrame, num_features: int = 21,
-                 num_samples: int = 2000) -> pd.Series:
+def lime_weights(pipe, explainer: LimeTabularExplainer, row: pd.DataFrame, num_samples: int = 2000) -> pd.Series:
     """LIME weight per original column for one person (positive = pushes towards diabetes)."""
     xt = preprocess(pipe, row).iloc[0].to_numpy()
     exp = explainer.explain_instance(xt, pipe.named_steps["model"].predict_proba, labels=(1,),
-                                     num_features=num_features, num_samples=num_samples)
+                                     num_features=len(row.columns), num_samples=num_samples)
     weights = dict(exp.as_map()[1])
     return pd.Series([weights.get(i, 0.0) for i in range(len(row.columns))], index=row.columns)
 

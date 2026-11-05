@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.explain import (BRFSS_FEATURES, agreement, describe_value, label, lime_explainer, lime_weights,
-                         partial_dependence, preprocess, shap_values)
+from src.explain import (BRFSS_FEATURES, YES_NO_FEATURES, agreement, describe_value, label, lime_explainer,
+                         lime_weights, partial_dependence, preprocess, shap_values)
 from src.models import build_pipeline
 
 
@@ -17,6 +17,10 @@ def fitted():
 def test_every_brfss_column_has_readable_info(fitted):
     _, X = fitted
     assert set(X.columns) == set(BRFSS_FEATURES)
+
+
+def test_yes_no_features():
+    assert "HighBP" in YES_NO_FEATURES and "BMI" not in YES_NO_FEATURES and "GenHlth" not in YES_NO_FEATURES
 
 
 def test_describe_value():

@@ -34,12 +34,10 @@ class UpperClipper(BaseEstimator, TransformerMixin):
         self.quantile = quantile
 
     def fit(self, X, y=None):
-        self.cap_ = X[self.column].quantile(self.quantile) if self.column in X else None
+        self.cap_ = X[self.column].quantile(self.quantile)
         return self
 
     def transform(self, X):
-        if self.cap_ is None:
-            return X
         X = X.copy()
         X[self.column] = X[self.column].clip(upper=self.cap_)
         return X
@@ -103,23 +101,22 @@ def valid_combinations():
 # ------------------------------------------------------------------ Metrics
 
 def scoring(n_classes: int) -> dict:
-    s = {
+    return {
         "macro_f1": "f1_macro",
         "balanced_accuracy": "balanced_accuracy",
         "accuracy": "accuracy",
         "roc_auc": "roc_auc" if n_classes == 2 else "roc_auc_ovr",
     }
-    return s
 
 
-def compare(X, y, cv, combos=None, n_jobs=1) -> pd.DataFrame:
+def compare(X, y, cv, combos=None) -> pd.DataFrame:
     """Cross-validate every (model, imbalance strategy) pair. Returns mean and std per metric."""
     rows = []
     n_classes = y.nunique()
     for model_name, imbalance in (combos or valid_combinations()):
         start = time.time()
         res = cross_validate(build_pipeline(model_name, imbalance), X, y, cv=cv,
-                             scoring=scoring(n_classes), n_jobs=n_jobs, error_score="raise")
+                             scoring=scoring(n_classes), error_score="raise")
         row = {"model": model_name, "imbalance": imbalance}
         for metric in scoring(n_classes):
             row[metric] = res[f"test_{metric}"].mean()
@@ -129,7 +126,7 @@ def compare(X, y, cv, combos=None, n_jobs=1) -> pd.DataFrame:
     return pd.DataFrame(rows).sort_values("macro_f1", ascending=False).reset_index(drop=True)
 
 
-def test_report(model, X_test, y_test, class_names) -> tuple[pd.Series, pd.DataFrame]:
+def evaluate_on_test(model, X_test, y_test, class_names) -> tuple[pd.Series, pd.DataFrame]:
     """Final metrics on the held-out test set, overall and per class."""
     pred = model.predict(X_test)
     proba = model.predict_proba(X_test)

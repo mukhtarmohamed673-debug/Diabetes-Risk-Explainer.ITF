@@ -16,13 +16,15 @@ import joblib
 import numpy as np
 import pandas as pd
 
-from src.explain import BRFSS_FEATURES, describe_value, label, shap_explainer, shap_values
+from src.explain import describe_value, label, shap_explainer, shap_values
 
 MODEL_DIR = Path(__file__).resolve().parents[1] / "models"
 MODEL_NAME = "interface_brfss_bin_gb"
 
-# How each factor should be talked about.
-CAN_CHANGE = {"BMI", "PhysActivity", "Fruits", "Veggies"}
+# How each factor should be talked about. BMI is a slider in the what-if
+# section; the other changeable factors are yes/no toggles.
+WHAT_IF_TOGGLES = ["PhysActivity", "Fruits", "Veggies"]
+CAN_CHANGE = {"BMI", *WHAT_IF_TOGGLES}
 MANAGE_WITH_DOCTOR = {"HighBP", "HighChol"}
 # Survey patterns that are not causes and must not read as advice. MentHlth is
 # here because more poor mental health days slightly *lower* predicted risk.
@@ -128,6 +130,3 @@ def default_profile() -> dict:
         "AnyHealthcare": 1, "NoDocbcCost": 0, "GenHlth": 2, "MentHlth": 0, "PhysHlth": 0, "DiffWalk": 0,
         "Sex": 0, "Age": 8, "Education": 5, "Income": 7,
     }
-
-
-assert set(default_profile()) == set(BRFSS_FEATURES)

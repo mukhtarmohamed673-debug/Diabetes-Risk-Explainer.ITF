@@ -1,11 +1,21 @@
 import pytest
 
-from src.interface import ASSOCIATION_ONLY, CAN_CHANGE, RiskModel, default_profile, sentence, summary
+from src.explain import BRFSS_FEATURES
+from src.interface import (ASSOCIATION_ONLY, CAN_CHANGE, WHAT_IF_TOGGLES, RiskModel, default_profile, sentence,
+                           summary)
 
 
 @pytest.fixture(scope="module")
 def model():
     return RiskModel()
+
+
+def test_default_profile_answers_every_question():
+    assert set(default_profile()) == set(BRFSS_FEATURES)
+
+
+def test_what_if_toggles_are_changeable_yes_no_factors():
+    assert set(WHAT_IF_TOGGLES) < CAN_CHANGE and "BMI" in CAN_CHANGE
 
 
 def test_risk_is_a_probability(model):

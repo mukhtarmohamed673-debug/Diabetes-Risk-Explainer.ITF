@@ -39,12 +39,10 @@ def validate(df: pd.DataFrame) -> None:
     if missing:
         raise ValueError(f"Missing columns: {sorted(missing)}")
     for col, top in COMPREHENSION_MAX.items():
-        bad = df[col].dropna()[(df[col].dropna() < 0) | (df[col].dropna() > top)]
-        if len(bad):
+        if not df[col].dropna().between(0, top).all():
             raise ValueError(f"{col} must be between 0 and {top}")
     for col in SUS_ITEMS + list(EXPLAIN_ITEMS):
-        bad = df[col].dropna()[~df[col].dropna().isin([1, 2, 3, 4, 5])]
-        if len(bad):
+        if not df[col].dropna().isin([1, 2, 3, 4, 5]).all():
             raise ValueError(f"{col} must be coded 1-5")
 
 
@@ -65,11 +63,10 @@ def score(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def item_summary(df: pd.DataFrame) -> pd.DataFrame:
-    comp = pd.DataFrame({
+    return pd.DataFrame({
         "item": list(COMPREHENSION_MAX),
         "pct_correct": [100 * df[c].sum() / (top * len(df)) for c, top in COMPREHENSION_MAX.items()],
     })
-    return comp
 
 
 def explain_summary(df: pd.DataFrame) -> pd.DataFrame:

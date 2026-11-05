@@ -15,15 +15,14 @@ import streamlit as st
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from src.explain import (AGE_BANDS, EDUCATION, GEN_HEALTH, INCOME, YES_NO, BRFSS_FEATURES,  # noqa: E402
-                         agreement, label, lime_explainer, lime_weights)
-from src.interface import (CAN_CHANGE, FACTOR_TYPES, RiskModel, default_profile,  # noqa: E402
+from src.explain import (AGE_BANDS, BRFSS_FEATURES, EDUCATION, GEN_HEALTH, INCOME,  # noqa: E402
+                         YES_NO_FEATURES, agreement, label, lime_explainer, lime_weights)
+from src.interface import (FACTOR_TYPES, WHAT_IF_TOGGLES, RiskModel, default_profile,  # noqa: E402
                            summary)
 
 st.set_page_config(page_title="Diabetes Risk Explainer", page_icon="🩺", layout="wide")
 
 RED, BLUE, GREY = "#C0504D", "#4A7FB5", "#9AA5B1"
-YES_NO_FEATURES = [f for f, (_, _, values) in BRFSS_FEATURES.items() if values is YES_NO]
 EXAMPLES = json.loads((ROOT / "app/examples.json").read_text())
 
 
@@ -34,14 +33,14 @@ def load_model() -> RiskModel:
 
 @st.cache_resource
 def load_lime(_model: RiskModel):
-    train = pd.read_csv(ROOT / "data/processed/brfss_bin_train.csv").drop(columns="Diabetes_binary")
-    return lime_explainer(_model.pipe, train.sample(5000, random_state=42))
+    # 5,000 training rows saved by app/make_examples.py
+    return lime_explainer(_model.pipe, pd.read_csv(ROOT / "app/lime_background.csv"))
 
 
 model = load_model()
 
 
-# ------------------------------------------------------------------ State
+#  State
 
 def set_profile(profile: dict):
     for f, v in profile.items():
@@ -61,7 +60,7 @@ def bmi_from_height_weight():
     st.session_state["BMI"] = int(round(w / (h / 100) ** 2))
 
 
-# ------------------------------------------------------------------ Header
+#  Header
 
 st.title("Diabetes Risk Explainer")
 st.markdown("Answer the questions to see an **estimated risk of diabetes** and, more importantly, "
@@ -71,7 +70,7 @@ st.info("**This is not a medical diagnosis.** It is a research tool built from a
 
 form_col, result_col = st.columns([5, 7], gap="large")
 
-# ------------------------------------------------------------------ Inputs
+#  Inputs
 
 with form_col:
     st.subheader("Your answers")
@@ -116,7 +115,7 @@ risk = model.risk(profile)
 category, category_text = model.category(risk)
 reasons = model.reasons(profile)
 
-# ------------------------------------------------------------------ Results
+#  Results
 
 with result_col:
     st.subheader("Estimated risk")
@@ -176,7 +175,7 @@ with result_col:
     st.caption("The 8 answers that moved your estimate most, compared with an average person in the survey. "
                "These show what the model has learned from the data. They are patterns, not proof of cause.")
 
-    # -------------------------------------------------------------- What-if
+    #  What-if
     st.subheader("What if?")
     st.caption("Try changing things that people can realistically change. Other factors are not included, "
                "because changing them would not be sensible advice.")
@@ -185,14 +184,13 @@ with result_col:
     if st.session_state.get("_whatif_base") != profile:
         st.session_state["_whatif_base"] = profile
         st.session_state["whatif_BMI"] = int(min(max(profile["BMI"], 15), 60))
-        for f in ["PhysActivity", "Fruits", "Veggies"]:
+        for f in WHAT_IF_TOGGLES:
             st.session_state[f"whatif_{f}"] = bool(profile[f])
     w1, w2 = st.columns(2)
     changes = {"BMI": w1.slider("BMI", 15, 60, key="whatif_BMI")}
-    for f in ["PhysActivity", "Fruits", "Veggies"]:
+    for f in WHAT_IF_TOGGLES:
         changes[f] = int(w2.toggle(label(f), key=f"whatif_{f}"))
     changes = {k: v for k, v in changes.items() if v != profile[k]}
-    assert set(changes) <= CAN_CHANGE
     if changes:
         new_risk = model.what_if(profile, changes)
         diff = (new_risk - risk) * 100
@@ -210,10 +208,9 @@ with result_col:
         if st.button("Show LIME explanation"):
             row = pd.DataFrame([profile])[model.features]
             lime = lime_weights(model.pipe, load_lime(model), row)
-            shap_series = reasons.set_index("feature")["shap"].reindex(model.features)
-            agree = agreement(shap_series, lime)
-            lime_top = lime.reindex(lime.abs().sort_values(ascending=False).index).head(5)
             by_feature = reasons.set_index("feature")
+            agree = agreement(by_feature["shap"].reindex(model.features), lime)
+            lime_top = lime.reindex(lime.abs().sort_values(ascending=False).index).head(5)
             st.dataframe(pd.DataFrame({
                 "Answer": [f"{label(f)} = {by_feature.loc[f, 'value']}" for f in lime_top.index],
                 "Effect": ["Raises risk" if v > 0 else "Lowers risk" for v in lime_top],
