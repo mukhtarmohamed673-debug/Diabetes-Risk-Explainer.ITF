@@ -17,8 +17,12 @@ from src.preprocess import RANDOM_STATE
 AGE_BANDS = {1: "18–24", 2: "25–29", 3: "30–34", 4: "35–39", 5: "40–44", 6: "45–49", 7: "50–54",
              8: "55–59", 9: "60–64", 10: "65–69", 11: "70–74", 12: "75–79", 13: "80 or older"}
 GEN_HEALTH = {1: "Excellent", 2: "Very good", 3: "Good", 4: "Fair", 5: "Poor"}
-EDUCATION = {1: "Never attended school", 2: "Primary school (grades 1–8)", 3: "Some high school",
-             4: "High school graduate", 5: "Some college", 6: "College graduate"}
+# UK names for the US survey's six levels: never attended, primary (grades 1-8), secondary
+# (grades 9-11, 12/GED), college (1-3 years) and university (4+ years).
+EDUCATION = {1: "Never attended school", 2: "Primary school", 3: "Secondary school",
+             4: "Secondary school", 5: "College", 6: "University"}
+# The app offers one code per level; for secondary, the code for finishing it.
+EDUCATION_CHOICES = [1, 2, 4, 5, 6]
 INCOME = {1: "Under $10,000", 2: "$10,000–14,999", 3: "$15,000–19,999", 4: "$20,000–24,999",
           5: "$25,000–34,999", 6: "$35,000–49,999", 7: "$50,000–74,999", 8: "$75,000 or more"}
 YES_NO = {0: "No", 1: "Yes"}

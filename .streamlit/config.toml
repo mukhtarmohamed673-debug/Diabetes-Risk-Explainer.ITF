@@ -1,31 +1,39 @@
 # Look of the Diabetes Risk Explainer.
-# Palette "three stones" (stone neutrals, one sage accent); type IBM Plex Sans and IBM Plex Mono.
+# Deep navy structure, turquoise controls, emerald for good outcomes, warm coral for raised risk.
+# Type: Plus Jakarta Sans.
 
 [client]
 toolbarMode = "minimal"
 showErrorDetails = false
-
-[ui]
-hideTopBar = true
 
 [browser]
 gatherUsageStats = false
 
 [theme]
 base = "light"
-primaryColor = "#5c6b54"
-backgroundColor = "#eeecea"
-secondaryBackgroundColor = "#e4e1dd"
-textColor = "#333231"
-linkColor = "#333231"
+primaryColor = "#14b8b0"
+backgroundColor = "#f2f5f9"
+secondaryBackgroundColor = "#e8edf4"
+textColor = "#0b1f3a"
+linkColor = "#0b7f86"
 linkUnderline = true
-borderColor = "#d6d2cd"
+borderColor = "#d5dde8"
 showWidgetBorder = true
 baseRadius = "12px"
-buttonRadius = "8px"
+buttonRadius = "10px"
 baseFontSize = 16
-font = "IBM Plex Sans:https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap, sans-serif"
-headingFont = "IBM Plex Sans:https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap, sans-serif"
-headingFontWeights = [600, 600, 600, 600, 600, 600]
-codeFont = "IBM Plex Mono:https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap, monospace"
-chartCategoricalColors = ["#9a4a2e", "#3b5870", "#5c6b54", "#8a6a1c"]
+font = "Plus Jakarta Sans:https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap, sans-serif"
+headingFont = "Plus Jakarta Sans:https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap, sans-serif"
+headingFontWeights = [800, 700, 700, 700, 700, 700]
+codeFont = "monospace"
+greenColor = "#12a170"
+redColor = "#ec5741"
+blueColor = "#0b7f86"
+
+[theme.sidebar]
+backgroundColor = "#0b1f3a"
+secondaryBackgroundColor = "#13305a"
+textColor = "#ffffff"
+primaryColor = "#14b8b0"
+borderColor = "#2a4672"
+linkColor = "#7fe3dc"
